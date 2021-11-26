@@ -1,0 +1,36 @@
+﻿@page "/calendar"
+@using Syncfusion.Blazor.Calendars
+<div class="control-section">
+    <div id="calender-control">
+        <SfCalendar TValue="DateTime?" @ref="@CalendarObj" @bind-Value="@SelectedDate">
+            <CalendarEvents TValue="DateTime?" OnRenderDayCell="@DisableDate"></CalendarEvents>
+        </SfCalendar>
+        <div id="display-date">
+            <span>Selected value: @(SelectedDate?.ToString("M/d/yyyy"))</span>
+        </div>
+    </div>
+</div>
+<style>
+    #calender-control {
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    #display-date {
+        max-width: 300px;
+        margin: 0 auto;
+        padding-top: 10px;
+    }
+</style>
+@code {
+    private DateTime? SelectedDate { get; set; } = DateTime.Now;
+    private SfCalendar<DateTime?> CalendarObj { get; set; }
+    private void DisableDate(RenderDayCellEventArgs args)
+    {
+        var view = CalendarObj.CurrentView();
+        if (view == "Month" && ((int)args.Date.DayOfWeek == 0 || (int)args.Date.DayOfWeek == 6))
+        {
+            args.IsDisabled = true;
+        }
+    }
+}
